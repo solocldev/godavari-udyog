@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "119620232467",
+    "project_id": "godavari-agro",
+    "storage_bucket": "godavari-agro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119620232467:android:e8feb94346f6664447e6e6",
+        "android_client_info": {
+          "package_name": "com.example.maize_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119620232467-b8j1b8fnlp9p6js16mg6ffnr8al1j4bv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-wIiXd4rIH-PJ3eYZM8Pg6mz8G0KdvaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119620232467-b8j1b8fnlp9p6js16mg6ffnr8al1j4bv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
