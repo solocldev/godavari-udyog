@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({Key? key}) : super(key: key);
@@ -13,10 +14,11 @@ class _ContactScreenState extends State<ContactScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.white, Color(0xffFFF6EA)])),
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.white, Color(0xffFFF6EA)]),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
@@ -24,6 +26,11 @@ class _ContactScreenState extends State<ContactScreen> {
             margin: EdgeInsets.all(24),
             child: Column(
               children: [
+                Text(
+                  'Helpdesk',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -61,7 +68,10 @@ class _ContactScreenState extends State<ContactScreen> {
                       shadowColor: Colors.transparent,
                       onPrimary: Colors.black,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Share.share('https://www.solocl.com',
+                          subject: 'checkout solocl');
+                    },
                     icon: Icon(
                       Icons.share,
                       size: 24.0,

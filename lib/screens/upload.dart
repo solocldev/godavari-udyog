@@ -86,7 +86,6 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create post')),
       body: Center(
         child: Padding(
             padding: EdgeInsets.all(10),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:maize_app/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Services extends StatelessWidget {
   const Services({Key? key}) : super(key: key);
@@ -21,6 +22,11 @@ class Services extends StatelessWidget {
             margin: EdgeInsets.all(24),
             child: Column(
               children: [
+                Text(
+                  'Weather',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -49,37 +55,61 @@ class Services extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                            '${snapshot.data!.docs[index]['name']}, ${snapshot.data!.docs[index]['location']}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        Text(
-                                            '${snapshot.data!.docs[index]['service']}',
-                                            style: TextStyle(
-                                                fontStyle: FontStyle.italic)),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
+                            return Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 5),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color(0xffEC9A2A)),
+                                onPressed: () {
+                                  launchUrl(Uri.parse(
+                                      "tel: ${snapshot.data!.docs[index]['contact']}"));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  '${snapshot.data!.docs[index]['name']}, ${snapshot.data!.docs[index]['location']}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  '${snapshot.data!.docs[index]['service']}',
+                                                  style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.italic)),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          )
+                                        ],
+                                      ),
+                                      InkWell(
+                                        child: Icon(Icons.phone),
+                                        onTap: () => launchUrl(Uri.parse(
+                                            "tel: ${snapshot.data!.docs[index]['contact']}")),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Icon(Icons.phone)
-                              ],
+                              ),
                             );
                           },
                         ),

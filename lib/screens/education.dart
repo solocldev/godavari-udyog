@@ -51,6 +51,7 @@ class _EducationState extends State<Education> {
               ),
             ),
             ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
@@ -88,56 +89,53 @@ class _EducationState extends State<Education> {
               colors: [Colors.white, Color(0xffFFF6EA)])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(24),
-            child: Column(
-              children: [
-                SingleChildScrollView(
-                    child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('admins')
-                      .doc(MyApp.uid)
-                      .collection('posts')
-                      .where("month", isEqualTo: "${month}")
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.data!.docs.length == 0) {
-                      return const Center(
-                        child: Text('No posts'),
-                      );
-                    }
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Search for videos, shops and more',
-                            ),
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ImageWidget(
-                                  snapShot: snapshot.data!.docs[index]);
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                )),
-              ],
-            ),
-          ),
+        body: Container(
+          margin: EdgeInsets.all(24),
+          child: SingleChildScrollView(
+              child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('admins')
+                .doc(MyApp.uid)
+                .collection('posts')
+                .where("month", isEqualTo: "${month}")
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.data!.docs.length == 0) {
+                return const Center(
+                  child: Text('No posts'),
+                );
+              }
+              return Column(
+                children: [
+                  Text(
+                    'Education',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Search for videos, shops and more',
+                    ),
+                  ),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ImageWidget(snapShot: snapshot.data!.docs[index]);
+                    },
+                  ),
+                ],
+              );
+            },
+          )),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:maize_app/main.dart';
+import 'package:share/share.dart';
 
 class MarketRates extends StatefulWidget {
   const MarketRates({Key? key}) : super(key: key);
@@ -26,6 +27,11 @@ class _MarketRatesState extends State<MarketRates> {
           margin: EdgeInsets.all(24),
           child: Column(
             children: [
+              Text(
+                'Market Rates',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
               TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -87,7 +93,10 @@ class _MarketRatesState extends State<MarketRates> {
                                       shadowColor: Colors.transparent,
                                       onPrimary: Colors.black,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Share.share('https://www.solocl.com',
+                                          subject: 'checkout solocl');
+                                    },
                                     icon: Icon(
                                       Icons.share,
                                       size: 24.0,

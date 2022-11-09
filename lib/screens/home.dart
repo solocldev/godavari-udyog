@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:maize_app/main.dart';
+import 'package:maize_app/screens/AdminNavigation.dart';
+import 'package:maize_app/screens/contactScreen.dart';
 import 'package:maize_app/screens/education.dart';
 import 'package:maize_app/screens/navigation.dart';
 import 'package:maize_app/screens/profileScreen.dart';
 import 'package:maize_app/screens/upload.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,38 +17,67 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int _selectedIndex = 0;
   final List<Map<String, dynamic>> navigationList = [
     {
       "title": "Education",
-      "icon": Icons.school,
+      "icon": 'assets/icons/reading.png',
       "navigate": 0,
     },
     {
       "title": "Market Rates",
-      "icon": Icons.attach_money,
+      "icon": 'assets/icons/rupee.png',
       'navigate': 1,
     },
     {
       "title": "Weather",
-      "icon": Icons.cloud,
+      "icon": 'assets/icons/cloudy.png',
       'navigate': 2,
     },
     {
       "title": "Services",
-      "icon": Icons.miscellaneous_services,
+      "icon": 'assets/icons/tractor.png',
       'navigate': 3,
     },
     {
       "title": "Corn Quality",
-      "icon": Icons.high_quality,
+      "icon": 'assets/icons/corn.png',
       'navigate': 4,
     },
     {
       "title": "Helpdesk",
-      "icon": Icons.help,
+      "icon": 'assets/icons/help.png',
       'navigate': 5,
     }
   ];
+
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+        (route) => false,
+      );
+    } else if (index == 1) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Profile(),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ContactScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,65 +92,63 @@ class _HomeState extends State<Home> {
           automaticallyImplyLeading: false,
           actions: [
             Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset('assets/images/company_logo.png'),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Image.asset('assets/images/company_logo.png'),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 10),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(MyApp.user['taluka_name']!,
+                                  style: TextStyle(fontSize: 20)),
+                              Text(
+                                MyApp.user['district_name']!,
+                                style: TextStyle(color: Color(0xffEC9A2A)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(MyApp.user['taluka_name']!,
-                                style: TextStyle(fontSize: 20)),
-                            Text(
-                              MyApp.user['district_name']!,
-                              style: TextStyle(color: Color(0xffEC9A2A)),
-                            ),
+                            InkWell(
+                                child: Icon(Icons.notifications),
+                                onTap: () async {
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  try {
+                                    await prefs.remove('loggedIn');
+                                    MyApp.loggedIn = false;
+                                    print('done');
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                }),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          child: Icon(Icons.notifications),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UploadImageScreen(),
-                                ));
-                          },
-                        ),
-                        SizedBox(width: 5),
-                        InkWell(
-                          child: Icon(Icons.portrait),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Profile(),
-                                ));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],
@@ -158,18 +188,14 @@ class _HomeState extends State<Home> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            SizedBox(
+                              height: 10,
+                            ),
                             InkWell(
-                              child: Container(
+                              child: Image.asset(
+                                navigationList[index]['icon'],
                                 height: MediaQuery.of(context).size.width / 4,
                                 width: MediaQuery.of(context).size.width / 4,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                child: Icon(
-                                  navigationList[index]['icon'],
-                                  size: 90,
-                                ),
                               ),
                               onTap: () {
                                 NavitionScreen.selectedIndex =
@@ -181,6 +207,25 @@ class _HomeState extends State<Home> {
                                     ));
                               },
                             ),
+                            // InkWell(
+                            //   child: Container(
+                            //     height: MediaQuery.of(context).size.width / 4,
+                            //     width: MediaQuery.of(context).size.width / 4,
+                            //     decoration: const BoxDecoration(
+                            //       shape: BoxShape.circle,
+                            //       color: Colors.white,
+                            //     ),
+                            //   ),
+                            //   onTap: () {
+                            //     NavitionScreen.selectedIndex =
+                            //         navigationList[index]['navigate'];
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //           builder: (context) => NavitionScreen(),
+                            //         ));
+                            //   },
+                            // ),
                             SizedBox(height: 7),
                             Text(
                               navigationList[index]['title'],
@@ -193,6 +238,26 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.portrait_rounded),
+              label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.phone),
+              label: 'Help Desk',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.black,
+          onTap: _onItemTapped,
         ),
       ),
     );

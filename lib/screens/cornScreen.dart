@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:maize_app/main.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CornScreen extends StatefulWidget {
   const CornScreen({Key? key}) : super(key: key);
@@ -25,6 +27,11 @@ class _CornScreenState extends State<CornScreen> {
               margin: EdgeInsets.all(24),
               child: Column(
                 children: [
+                  Text(
+                    'Corn Quality',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
                   TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -122,7 +129,10 @@ class _CornScreenState extends State<CornScreen> {
                             shadowColor: Colors.transparent,
                             onPrimary: Colors.black,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Share.share('https://www.solocl.com',
+                                subject: 'checkout solocl');
+                          },
                           icon: Icon(
                             Icons.share,
                             size: 24.0,
@@ -133,17 +143,23 @@ class _CornScreenState extends State<CornScreen> {
                         Divider(
                           thickness: 1,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Enquire with Godawari Udyog',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Icon(Icons.phone)
-                          ],
+                        InkWell(
+                          onTap: () {
+                            launchUrl(Uri.parse("tel: 98998877665"));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Enquire with Godawari Udyog',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(Icons.phone)
+                            ],
+                          ),
                         )
                       ],
                     ),

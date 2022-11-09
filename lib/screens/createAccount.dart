@@ -85,16 +85,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   var dropdownvalue;
   var dropdownvaluetaluka;
+  var talukaList;
+  var selected = false;
 
-  List<String> returnTaluka() {
+  List<String> returnTaluka(value) {
     List<String> talukaList = ['Shirala'];
-    if (dropdownvalue == 'Sangli') {
+    if (value == 'Sangli') {
       talukaList = _options[0];
-    } else if (dropdownvalue == 'Satara') {
+    } else if (value == 'Satara') {
       talukaList = _options[1];
-    } else if (dropdownvalue == 'Kolhapur') {
+    } else if (value == 'Kolhapur') {
       talukaList = _options[2];
-    } else if (dropdownvalue == 'Solapur') {
+    } else if (value == 'Solapur') {
       talukaList = _options[3];
     }
     return talukaList;
@@ -121,12 +123,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       authentication(
               context: context, mobileNumber: widget.mobileNumber, find: find)
           .whenComplete(() => scaffoldMessage(
-              context: context, message: 'You are registered!!'))
-          .whenComplete(() => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              )));
+              context: context, message: 'You are registered!!'));
       setState(() {
         widget.mobileNumber = _numberController.text;
       });
@@ -137,6 +134,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   void initState() {
     _numberController.text = widget.mobileNumber!;
+    talukaList = _options[0];
   }
 
   @override
@@ -208,25 +206,46 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: TextField(
-                    controller: _talukaNameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Taluka Name',
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      border: Border.all(
+                          color: Colors.grey,
+                          style: BorderStyle.solid,
+                          width: 1.2),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: TextField(
-                    controller: _districtNameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Disctrict Name',
-                    ),
-                  ),
-                ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        isExpanded: true,
+                        items: districts
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        value: dropdownvalue,
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        onChanged: (Object? value) {
+                          setState(() {
+                            if (value == 'Sangli') {
+                              talukaList = _options[0];
+                            } else if (value == 'Satara') {
+                              talukaList = _options[1];
+                            } else if (value == 'Kolhapur') {
+                              talukaList = _options[2];
+                            } else if (value == 'Solapur') {
+                              talukaList = _options[3];
+                            }
+                            dropdownvaluetaluka = null;
+                            dropdownvalue = value!;
+                            _districtNameController.text = dropdownvalue;
+                          });
+                        },
+                        hint: Text('District Name'),
+                      ),
+                    )),
                 Container(
                     margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
@@ -237,51 +256,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           style: BorderStyle.solid,
                           width: 1.2),
                     ),
-                    child: DropdownButton(
-                      isExpanded: true,
-                      items: districts
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      value: dropdownvalue,
-                      icon: Icon(Icons.keyboard_arrow_down),
-                      onChanged: (Object? value) {
-                        setState(() {
-                          dropdownvalue = value!;
-                          returnTaluka();
-                        });
-                      },
-                      hint: Text('District Name'),
-                    )),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0),
-                      border: Border.all(
-                          color: Colors.grey,
-                          style: BorderStyle.solid,
-                          width: 1.2),
-                    ),
-                    child: DropdownButton(
-                      isExpanded: true,
-                      items: returnTaluka()
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      value: dropdownvaluetaluka,
-                      icon: Icon(Icons.keyboard_arrow_down),
-                      onChanged: (Object? value) {
-                        setState(() {
-                          dropdownvaluetaluka = value!;
-                        });
-                      },
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        isExpanded: true,
+                        items: talukaList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        value: dropdownvaluetaluka,
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        onChanged: (Object? value) {
+                          setState(() {
+                            dropdownvaluetaluka = value!;
+                            _talukaNameController.text = dropdownvaluetaluka;
+                          });
+                        },
+                        hint: Text('Taluka Name'),
+                      ),
                     )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -305,7 +299,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           _villageNameController.text != '' &&
                           _firstNameController.text != '' &&
                           _lastNameController.text != '' &&
-                          _numberController.text != '') {
+                          _numberController.text != '' &&
+                          _numberController.text.length == 10) {
                         createUser();
                       } else {
                         scaffoldMessage(

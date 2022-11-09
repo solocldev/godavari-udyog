@@ -17,10 +17,15 @@ Future authentication(
     return;
   }
   try {
+    FirebaseAuth auth = FirebaseAuth.instance;
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: '+91 ${mobileNumber}',
-      verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        print("Error ${e}");
+      },
       codeSent: (String verificationId, int? resendToken) {
         print(verificationId);
         CreateAccountScreen.verify = verificationId;

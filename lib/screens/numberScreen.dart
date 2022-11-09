@@ -73,7 +73,10 @@ class _NumberScreenState extends State<NumberScreen> {
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xffEC9A2A)),
                       onPressed: () async {
-                        navigateScreen();
+                        if (_numberController.text != '' &&
+                            _numberController.text.length == 10) {
+                          navigateScreen();
+                        }
                       },
                       child: Text('Get OTP', style: TextStyle(fontSize: 18)),
                     ),

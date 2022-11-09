@@ -6,7 +6,9 @@ import 'package:maize_app/screens/cornScreen.dart';
 import 'package:maize_app/screens/education.dart';
 import 'package:maize_app/screens/home.dart';
 import 'package:maize_app/screens/marketRatesScreen.dart';
+import 'package:maize_app/screens/profileScreen.dart';
 import 'package:maize_app/screens/servicesScreen.dart';
+import 'package:maize_app/screens/weather.dart';
 
 class NavitionScreen extends StatefulWidget {
   static int selectedIndex = 0;
@@ -16,22 +18,43 @@ class NavitionScreen extends StatefulWidget {
 }
 
 class _NavitionScreenState extends State<NavitionScreen> {
+  int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     Education(
       month: 1,
     ),
     MarketRates(),
-    Text(
-      'Index 3: Weather',
-    ),
+    WeatherScreen(),
     Services(),
     CornScreen(),
     ContactScreen()
   ];
   void _onItemTapped(int index) {
-    setState(() {
-      NavitionScreen.selectedIndex = index;
-    });
+    if (index == 0) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+        (route) => false,
+      );
+    } else if (index == 1) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Profile(),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ContactScreen(),
+        ),
+      );
+    }
   }
 
   @override
@@ -47,60 +70,51 @@ class _NavitionScreenState extends State<NavitionScreen> {
           automaticallyImplyLeading: false,
           actions: [
             Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                        child: Icon(Icons.home),
-                        onTap: () {
-                          Navigator.pop(context);
-                        }),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset('assets/images/company_logo.png'),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Image.asset('assets/images/company_logo.png'),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 10),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(MyApp.user['taluka_name']!,
+                                  style: TextStyle(fontSize: 20)),
+                              Text(
+                                MyApp.user['district_name']!,
+                                style: TextStyle(color: Color(0xffEC9A2A)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(MyApp.user['taluka_name']!,
-                                style: TextStyle(fontSize: 20)),
-                            Text(
-                              MyApp.user['district_name']!,
-                              style: TextStyle(color: Color(0xffEC9A2A)),
-                            ),
+                            Icon(Icons.notifications),
                           ],
                         ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Color(0xffEC9A2A),
-                          size: 30,
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.notifications),
-                        SizedBox(width: 5),
-                        Icon(Icons.portrait),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],
@@ -113,32 +127,20 @@ class _NavitionScreenState extends State<NavitionScreen> {
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'Education',
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.attach_money),
-              label: 'Market Rates',
+              icon: Icon(Icons.portrait_rounded),
+              label: 'Profile',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.cloud),
-              label: 'Weather',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.miscellaneous_services),
-              label: 'Services',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.high_quality),
-              label: 'Corn Quality',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.help),
-              label: 'Helpdesk',
+              icon: Icon(Icons.phone),
+              label: 'Help Desk',
             ),
           ],
-          currentIndex: NavitionScreen.selectedIndex,
-          selectedItemColor: Color(0xffEC9A2A),
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black,
           onTap: _onItemTapped,
         ),

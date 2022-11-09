@@ -42,6 +42,10 @@ dependencies:
   firebase_auth: ^3.4.2
   location: ^4.4.0
   font_awesome_flutter: ^10.2.1
+  http: ^0.13.5
+  url_launcher: ^6.1.6
+  share: ^2.0.4
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +71,12 @@ flutter:
   assets: 
     - assets/images/corn.png
     - assets/images/company_logo.png
+    - assets/icons/help.png
+    - assets/icons/cloudy.png
+    - assets/icons/corn.png
+    - assets/icons/reading.png
+    - assets/icons/rupee.png
+    - assets/icons/tractor.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

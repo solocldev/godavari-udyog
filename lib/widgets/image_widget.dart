@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_app/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageWidget extends StatefulWidget {
   const ImageWidget({Key? key, this.snapShot}) : super(key: key);
@@ -50,14 +51,19 @@ class _ImageWidgetState extends State<ImageWidget> {
           SizedBox(height: 10),
           Row(
             children: [
-              Text(widget.snapShot['title'],
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Flexible(
+                child: Text(widget.snapShot['title'],
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
             ],
           ),
           Row(
             children: [
-              Text(widget.snapShot['sub_title'],
-                  style: TextStyle(fontSize: 16)),
+              Flexible(
+                child: Text(widget.snapShot['sub_title'],
+                    style: TextStyle(fontSize: 16)),
+              ),
             ],
           ),
           SizedBox(height: 10),
@@ -76,13 +82,17 @@ class _ImageWidgetState extends State<ImageWidget> {
                     shadowColor: Colors.transparent,
                     onPrimary: Colors.black,
                   ),
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection('admins')
-                        .doc(MyApp.uid)
-                        .collection('posts')
-                        .doc(widget.snapShot['id'])
-                        .update({'likes': widget.snapShot['likes'] + 1});
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    if (prefs.getBool('${widget.snapShot['id']}') == null) {
+                      FirebaseFirestore.instance
+                          .collection('admins')
+                          .doc(MyApp.uid)
+                          .collection('posts')
+                          .doc(widget.snapShot['id'])
+                          .update({'likes': widget.snapShot['likes'] + 1});
+                    }
+                    prefs.setBool('${widget.snapShot['id']}', true);
                   },
                   icon: Icon(
                     Icons.thumb_up,

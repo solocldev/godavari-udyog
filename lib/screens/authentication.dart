@@ -6,6 +6,7 @@ import 'package:maize_app/screens/createAccount.dart';
 import 'package:maize_app/screens/home.dart';
 import 'package:maize_app/utils/fuctions.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthScreen extends StatefulWidget {
   final mobileNumber;
@@ -98,16 +99,19 @@ class _AuthScreenState extends State<AuthScreen> {
                             print(CreateAccountScreen.verify!);
                             PhoneAuthCredential credential =
                                 PhoneAuthProvider.credential(
-                                    verificationId: CreateAccountScreen.verify!,
+                                    verificationId: widget.mobileNumber,
                                     smsCode: code);
-                            // await auth.signInWithCredential(credential);
+                            await auth.signInWithCredential(credential);
                             MyApp.loggedIn = true;
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setBool('loggedIn', true);
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(builder: (context) => Home()),
                                 (route) => false);
                           } catch (e) {
-                            // scaffoldMessage(context: context, message: '$e');
+                            scaffoldMessage(context: context, message: '$e');
+                            print(e);
                           }
                         },
                         child: Text('Continue')),

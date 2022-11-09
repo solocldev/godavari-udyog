@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:maize_app/main.dart';
 import 'package:maize_app/screens/createAccount.dart';
 import 'package:maize_app/screens/numberScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -70,7 +72,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               margin: EdgeInsets.all(5),
                               child: ElevatedButton(
                                 child: Text('Enter app'),
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
