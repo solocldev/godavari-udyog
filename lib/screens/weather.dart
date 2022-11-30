@@ -12,56 +12,32 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  final _coordinateList = [
-    {
-      'location': 'Sangli',
-      'lat': 17.1707,
-      'long': 74.6869,
-    },
-    {
-      'location': 'Satara',
-      'lat': 17.5780,
-      'long': 74.0300,
-    },
-    {
-      'location': 'Kolhapur',
-      'lat': 16.5764,
-      'long': 74.1240,
-    },
-    {
-      'location': 'Kolhapur',
-      'lat': 17.6957,
-      'long': 75.5277,
-    },
-  ];
-
   var apiKey = '94236490bdcfedabdb66ef6ebdc775df';
   var temperature = 77.77, long, lat;
 
   // https://api.openweathermap.org/data/2.5/weather?lat=17.1707&lon=74.6869&appid=${apiKey}&units=metric
 
   Future<String>? getData() async {
-    lat = _coordinateList
-        .map((ob) {
-          if (ob['location'] == MyApp.user['district_name']) {
-            return ob['lat'];
-          }
-        })
-        .toList()
-        .first;
-    long = _coordinateList
-        .map((ob) {
-          if (ob['location'] == MyApp.user['district_name']) {
-            return ob['long'];
-          }
-        })
-        .toList()
-        .first;
+    var dist = MyApp.user['district_name'];
+    if (dist == 'Sangli') {
+      lat = 17.1707;
+      long = 74.6869;
+    } else if (dist == 'Satara') {
+      lat = 17.5780;
+      long = 74.0300;
+    } else if (dist == 'Kolhapur') {
+      lat = 16.5764;
+      long = 74.1240;
+    } else if (dist == 'Solapur') {
+      lat = 17.6957;
+      long = 75.5277;
+    }
     try {
       var endpoint = Uri.parse(
           'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${apiKey}&units=metric');
       var response = await http.get(endpoint);
       var body = jsonDecode(response.body);
+      print(lat);
       temperature = body['main']['temp'];
       print(temperature);
       return temperature.toString();

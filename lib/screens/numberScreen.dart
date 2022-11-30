@@ -8,7 +8,6 @@ import 'package:maize_app/utils/fuctions.dart';
 
 class NumberScreen extends StatefulWidget {
   const NumberScreen({Key? key}) : super(key: key);
-
   @override
   State<NumberScreen> createState() => _NumberScreenState();
 }
@@ -17,13 +16,16 @@ class _NumberScreenState extends State<NumberScreen> {
   final _numberController = TextEditingController();
 
   navigateScreen() async {
-    final find = await FirebaseFirestore.instance
-        .collection("users")
-        .where("number", isEqualTo: '${_numberController.text}')
-        .get();
-
-    authentication(
-        context: context, mobileNumber: _numberController.text, find: find);
+    try {
+      final find = await FirebaseFirestore.instance
+          .collection("users")
+          .where("number", isEqualTo: '${_numberController.text}')
+          .get();
+      authentication(
+          context: context, mobileNumber: _numberController.text, find: find);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

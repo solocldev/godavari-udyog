@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_app/main.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageWidget extends StatefulWidget {
@@ -20,7 +21,7 @@ class _ImageWidgetState extends State<ImageWidget> {
         horizontal: (MediaQuery.of(context).size.width -
                 (MediaQuery.of(context).size.width) / 1) /
             2,
-        vertical: 20,
+        vertical: 10,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -109,7 +110,10 @@ class _ImageWidgetState extends State<ImageWidget> {
                     shadowColor: Colors.transparent,
                     onPrimary: Colors.black,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Share.share('https://www.solocl.com',
+                        subject: 'checkout solocl');
+                  },
                   icon: Icon(
                     Icons.share,
                     size: 24.0,

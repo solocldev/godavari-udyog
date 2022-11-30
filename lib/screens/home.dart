@@ -4,6 +4,7 @@ import 'package:maize_app/main.dart';
 import 'package:maize_app/screens/AdminNavigation.dart';
 import 'package:maize_app/screens/contactScreen.dart';
 import 'package:maize_app/screens/education.dart';
+import 'package:maize_app/screens/landing.dart';
 import 'package:maize_app/screens/navigation.dart';
 import 'package:maize_app/screens/profileScreen.dart';
 import 'package:maize_app/screens/upload.dart';
@@ -50,9 +51,8 @@ class _HomeState extends State<Home> {
       'navigate': 5,
     }
   ];
-
   void _onItemTapped(int index) {
-    if (index == 0) {
+    if (index == 0 && MyApp.prevIndex != 0) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -60,22 +60,28 @@ class _HomeState extends State<Home> {
         ),
         (route) => false,
       );
-    } else if (index == 1) {
-      Navigator.pop(context);
+    } else if (index == 1 && MyApp.prevIndex != 1) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => Profile(),
         ),
       );
-    } else if (index == 2) {
-      Navigator.pop(context);
+    } else if (index == 2 && MyApp.prevIndex != 2) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ContactScreen(),
+          builder: (context) => ContactScreen(
+            homeCall: true,
+          ),
         ),
       );
+    }
+    if (MyApp.prevIndex == -1) {
+      MyApp.prevIndex = index;
+    }
+    if (MyApp.prevIndex != index) {
+      MyApp.prevIndex = index;
     }
   }
 
@@ -131,18 +137,7 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                                child: Icon(Icons.notifications),
-                                onTap: () async {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  try {
-                                    await prefs.remove('loggedIn');
-                                    MyApp.loggedIn = false;
-                                    print('done');
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                }),
+                                child: Icon(Icons.notifications), onTap: () {}),
                           ],
                         ),
                       ),
@@ -198,8 +193,12 @@ class _HomeState extends State<Home> {
                                 width: MediaQuery.of(context).size.width / 4,
                               ),
                               onTap: () {
+                                MyApp.prevIndex = -1;
                                 NavitionScreen.selectedIndex =
                                     navigationList[index]['navigate'];
+                                if (NavitionScreen.selectedIndex == 5) {
+                                  MyApp.prevIndex = 2;
+                                }
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -254,7 +253,7 @@ class _HomeState extends State<Home> {
               label: 'Help Desk',
             ),
           ],
-          currentIndex: _selectedIndex,
+          currentIndex: MyApp.mainIndex,
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black,
           onTap: _onItemTapped,

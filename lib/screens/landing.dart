@@ -71,6 +71,8 @@ class _LandingScreenState extends State<LandingScreen> {
                               height: 40,
                               margin: EdgeInsets.all(5),
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color(0xffEC9A2A)),
                                 child: Text('Enter app'),
                                 onPressed: () async {
                                   Navigator.push(

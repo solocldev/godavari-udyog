@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthScreen extends StatefulWidget {
   final mobileNumber;
+  static String? verificationCode;
   AuthScreen({Key? key, this.mobileNumber}) : super(key: key);
-
   @override
   State<AuthScreen> createState() => _AuthScreenState();
 }
@@ -96,15 +96,16 @@ class _AuthScreenState extends State<AuthScreen> {
                             primary: Color(0xffEC9A2A)),
                         onPressed: () async {
                           try {
-                            print(CreateAccountScreen.verify!);
                             PhoneAuthCredential credential =
                                 PhoneAuthProvider.credential(
-                                    verificationId: widget.mobileNumber,
+                                    verificationId:
+                                        AuthScreen.verificationCode!,
                                     smsCode: code);
-                            await auth.signInWithCredential(credential);
-                            MyApp.loggedIn = true;
+
+                            // await auth.signInWithCredential(credential);
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setBool('loggedIn', true);
+
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(builder: (context) => Home()),

@@ -30,7 +30,7 @@ class _NavitionScreenState extends State<NavitionScreen> {
     ContactScreen()
   ];
   void _onItemTapped(int index) {
-    if (index == 0) {
+    if (index == 0 && MyApp.prevIndex != 0) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -38,22 +38,28 @@ class _NavitionScreenState extends State<NavitionScreen> {
         ),
         (route) => false,
       );
-    } else if (index == 1) {
-      Navigator.pop(context);
+    } else if (index == 1 && MyApp.prevIndex != 1) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => Profile(),
         ),
       );
-    } else if (index == 2) {
-      Navigator.pop(context);
+    } else if (index == 2 && MyApp.prevIndex != 2) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ContactScreen(),
+          builder: (context) => ContactScreen(
+            homeCall: true,
+          ),
         ),
       );
+    }
+    if (MyApp.prevIndex == -1) {
+      MyApp.prevIndex = index;
+    }
+    if (MyApp.prevIndex != index) {
+      MyApp.prevIndex = index;
     }
   }
 
@@ -139,7 +145,7 @@ class _NavitionScreenState extends State<NavitionScreen> {
               label: 'Help Desk',
             ),
           ],
-          currentIndex: _selectedIndex,
+          currentIndex: MyApp.mainIndex,
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black,
           onTap: _onItemTapped,

@@ -1,11 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:maize_app/main.dart';
-import 'package:maize_app/screens/authentication.dart';
-import 'package:maize_app/screens/home.dart';
 import 'package:maize_app/utils/fuctions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   String? mobileNumber;
@@ -130,6 +129,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     } catch (e) {
       scaffoldMessage(context: context, message: 'An error occured!!');
     }
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('user', jsonEncode(json));
   }
 
   void initState() {
